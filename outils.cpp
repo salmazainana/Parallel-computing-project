@@ -119,7 +119,7 @@ double extended_score(std::vector<std::pair<int, int>> alignment, double start_t
 }
 
 void initializeTables(std::vector<std::vector<double>>& T1, std::vector<std::vector<double>>& T2, std::vector<std::vector<double>>& T3,
-                      int isec, int jsec, int iprime, int jprime, double start_type) {
+                      int iprime, int jprime, int isec, int jsec, double start_type) {
     // Initialize tables with appropriate sizes
     T1[iprime - 1][jprime - 1] = -INFINITY;
     T2[iprime - 1][jprime - 1] = -INFINITY;
@@ -213,7 +213,7 @@ double hprime(int k, double end_type){
 // such that if k==end_type and end_type in {-2,-3} then hprime(k)=h else hprime(k) == 0
 
 double optimal_score(std::vector<std::vector<double>>& T1, std::vector<std::vector<double>>& T2, std::vector<std::vector<double>>& T3,
-                  int isec, int jsec, int iprime, int jprime, double end_type) {
+                  int iprime, int jprime, int isec, int jsec, double end_type) {
     if (end_type > 0) {
         if (end_type == 1) {
             return T1[isec][jsec];
@@ -232,3 +232,65 @@ double optimal_score(std::vector<std::vector<double>>& T1, std::vector<std::vect
         return std::max( temp1,temp2);
     }
 }
+
+
+//Traceback function for the alignment of two subsequences
+std::vector<std::pair<int, int>> traceback( std::vector<std::vector<double>>& T1, std::vector<std::vector<double>>& T2, std::vector<std::vector<double>>& T3,
+                  int iprime, int jprime, int isec, int jsec, double start_type){
+    std::vector<std::pair<int, int>> alignment;
+    std::pair<int, int> s = {iprime, jprime};
+    alignment.push_back(s);
+    if (end_type>0){
+        
+    }
+
+
+
+}
+
+/*  We want to find elements of a partial balanced partition 
+    which is a list of cells where the subdivision occurs 
+    by using the tables T1 T2 T3. 
+*/
+
+// if [i,j]k is on the path of the solution C through T
+// then the original problem of finding alignment between A and B with start_type = s, end_type = e
+// is reduced to finding alignment between A[1,i] and B[1,j], start_type = s, end_type = k 
+// and A[i+1,m] and B[j+1,n], start_type = -k, end_type = e
+
+// To find cells that lie on the solution we use the method in paper [10]
+
+/*Reverse method:
+ We consider revA and revB as the reverse of A and B respectively.
+    We use the same tables TR1 TR2 TR3 to find the cells that lie on the solution.
+    We use the same method as above but with the following changes:
+    1. start_type = e and end_type = k
+    2. We start from [isec,jsec] and end at [iprime,jprime]
+    The optimal score is found in [iprime,jprime] and the cells that lie on the solution
+     are found by backtracking from [iprime,jprime] to [isec,jsec]
+*/ 
+
+// This function finds the cells that lie on the solution
+
+
+void ReversedTables(std::vector<std::vector<double>>& TR1, std::vector<std::vector<double>>& TR2,
+                     std::vector<std::vector<double>>& TR3,
+                      int isec, int jsec, int iprime, int jprime, double end_type) {
+    // NEED TO REDO 
+    initializeTables(TR1, TR2, TR3, isec, jsec, iprime, jprime, end_type);}
+
+
+double opt(int i, int j,std::vector<std::vector<double>>&  T1,std::vector<std::vector<double>>&  T2, 
+        std::vector<std::vector<double>>& T3,std::vector<std::vector<double>>&  TR1, std::vector<std::vector<double>>& TR2,
+        std::vector<std::vector<double>>& TR3 ){
+            // This function finds the optimal score of the alignment between A and B
+            // that passes through the cell [i,j]
+
+            double Tmax = std::max(std::max(T1[i][j], T2[i][j]), T3[i][j]);
+            double TRmax = std::max(std::max(TR1[i][j], TR2[i][j]), TR3[i][j]);
+            double temp = std::max(Tmax+TRmax, T2[i][j] + TR2[i][j] + h);
+            return std::max(temp, T3[i][j] + TR3[i][j] + h);
+        }
+
+// A solution passes through the cell [i,j] if and only if opt(i,j) is equal to the score of an optimal alighment 
+// between A and B ie opt(i,j) == T1[m][n] where m is the length of A and n is the length of B
