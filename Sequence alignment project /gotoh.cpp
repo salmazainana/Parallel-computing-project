@@ -159,7 +159,7 @@ void gotohAlignmentParallel(const std::string& seq1, const std::string& seq2, in
     std::cout << align1 << std::endl;
     std::cout << align2 << std::endl;
 }
-
+/*
 string repeat(const char* s, int m) {
     string res;
     for (int i = 0; i < m; i++) {
@@ -179,3 +179,4 @@ int main() {
     
     return 0;
 }
+*/
